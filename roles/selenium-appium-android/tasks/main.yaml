@@ -1,0 +1,5 @@
+---
+- include: kill-appium-server.yml
+- include: config-appium.yml
+- include: kill-appium-server.yml
+

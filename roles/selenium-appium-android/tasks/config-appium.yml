@@ -1,0 +1,36 @@
+---
+- name: Check the Appium Server folder exists
+  stat:
+    path: "{{appium_config_path}}"
+  register: appium_server_dir
+
+- name: "echo if server directory already existed"
+  debug:
+    msg: "the server directory is already existed {{appium_server_dir.stat.exists}}"
+  when: appium_server_dir.stat.exists
+
+- name: "Create server directory if not exists"
+  file:
+    path: "{{appium_config_path}}"
+    state: directory
+    mode: 0777
+  when: appium_server_dir.stat.exists == false
+
+- name: Start appium server if not started
+  script: ./scripts/start-appium-server.sh {{ item }}
+  with_items:
+      - 4723
+      - 4724
+
+- name: copy android_device.sh to host
+  template:
+    dest: "{{appium_config_path}}/launch_android_emulator.sh"
+    src: ./scripts/launch_android_emulator.sh
+    mode: 0755
+
+- name: copy kill-android-emulator.sh to host
+  template:
+    dest: "{{appium_config_path}}/kill-android-emulator.sh"
+    src: ./scripts/kill-android-emulator.sh
+    mode: 0755
+

@@ -1,0 +1,7 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Setup appium environment to run mobile tests for emulators / real devices
+  hosts: appium
+
+  roles:
+    - selenium-appium-android
